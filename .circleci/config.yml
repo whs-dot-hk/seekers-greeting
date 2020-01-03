@@ -1,12 +1,18 @@
 version: 2.1
 
 executors:
+  node:
+    docker:
+      - image: circleci/node:13
   browsers:
     docker:
       - image: circleci/node:13-browsers
+  python:
+    docker:
+      - image: circleci/python:3.7-stretch
 
 jobs:
-  build:
+  test:
     executor: browsers
     steps:
       - checkout
@@ -30,4 +36,37 @@ jobs:
       - run:
           name: e2e
           command: npm run e2e
+  build:
+    executor: node
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - dependencies-cache-{{ checksum "package-lock.json" }}
+            - dependencies-cache-
+      - run:
+          name: install
+          command: npm install
+      - save_cache:
+          key: dependencies-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
+      - run:
+          name: build
+          command: npm run build -- --prod
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist/seekers-greeting
+  deploy:
+    executor: python
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: install awscli
+          command: sudo pip install awscli
+      - run:
+          name: deploy
+          command aws s3 sync dist/seekers-greeting s3://greeting.whs.hk --delete
 
