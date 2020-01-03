@@ -3,22 +3,22 @@ version: 2.1
 executors:
   browsers:
     docker:
-    - image: circleci/node:13-browsers
+      - image: circleci/node:13-browsers
 
 jobs:
   test:
     executor: browsers
     steps:
-    - checkout
-    - restore_cache:
-      keys:
-      - dependencies-cache-{{ checksum "package-lock.json" }}
-      - dependencies-cache-
-    - run:
-      name: install
-      command: npm install
-    - save_cache:
-      key: dependencies-cache-{{ checksum "package-lock.json" }}
-      paths:
-      - node_modules
+      - checkout
+      - restore_cache:
+          keys:
+            - dependencies-cache-{{ checksum "package-lock.json" }}
+            - dependencies-cache-
+      - run:
+          name: install
+          command: npm install
+      - save_cache:
+          key: dependencies-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
 
