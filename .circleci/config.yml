@@ -68,5 +68,4 @@ jobs:
           command: sudo pip install awscli
       - run:
           name: deploy
-          command aws s3 sync dist/seekers-greeting s3://greeting.whs.hk --delete
-
+          command: aws s3 sync dist/seekers-greeting s3://greeting.whs.hk --delete
