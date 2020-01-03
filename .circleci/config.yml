@@ -76,3 +76,6 @@ workflows:
       - test
       - build
       - deploy
+          requires:
+            - build
+
