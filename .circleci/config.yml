@@ -6,7 +6,7 @@ executors:
       - image: circleci/node:13-browsers
 
 jobs:
-  test:
+  build:
     executor: browsers
     steps:
       - checkout
