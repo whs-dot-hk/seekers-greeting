@@ -69,3 +69,10 @@ jobs:
       - run:
           name: deploy
           command: aws s3 sync dist/seekers-greeting s3://greeting.whs.hk --delete
+
+workflows:
+  test_build_deploy:
+    jobs:
+      - test
+      - build
+      - deploy
